@@ -15,6 +15,7 @@ public class eventRegistration extends javax.swing.JFrame {
      */
     public eventRegistration() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -40,6 +41,7 @@ public class eventRegistration extends javax.swing.JFrame {
         jXButton1 = new org.jdesktop.swingx.JXButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(730, 530));
         setResizable(false);
 

@@ -17,6 +17,7 @@ public class staffRegistration extends javax.swing.JFrame {
      */
     public staffRegistration() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -46,6 +47,7 @@ public class staffRegistration extends javax.swing.JFrame {
         jXButton1 = new org.jdesktop.swingx.JXButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(730, 530));
         setResizable(false);
 

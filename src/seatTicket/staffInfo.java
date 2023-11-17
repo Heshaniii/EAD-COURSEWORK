@@ -4,6 +4,10 @@
  */
 package seatTicket;
 
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author 97150
@@ -15,6 +19,20 @@ public class staffInfo extends javax.swing.JFrame {
      */
     public staffInfo() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        try {
+            ResultSet rs = DBM.dbms.search("select * from staff_info");
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            while (rs.next()) {
+                String[] rows = {rs.getString("ID"), rs.getString("NAME"), rs.getString("CONTACT"), rs.getString("EMAIL")};
+                model.addRow(rows);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+
+        }
     }
 
     /**
@@ -39,6 +57,7 @@ public class staffInfo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
+        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(730, 530));
         setResizable(false);
 
@@ -75,7 +94,7 @@ public class staffInfo extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "NAME", "SID", "CONTACT", "EMAIL"
+                "SID", "NAME", "CONTACT", "EMAIL"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -85,6 +104,11 @@ public class staffInfo extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Tw Cen MT", 1, 12)); // NOI18N
         jButton1.setText("SEARCH");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Tw Cen MT", 1, 12)); // NOI18N
         jButton2.setText("UPDATE");
@@ -96,6 +120,11 @@ public class staffInfo extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Tw Cen MT", 1, 12)); // NOI18N
         jButton3.setText("DELETE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jXButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\97150\\Desktop\\hi.png")); // NOI18N
         jXButton1.setText("HOME");
@@ -173,8 +202,81 @@ public class staffInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        int row = jTable1.getSelectedRow();
+        String[] cell = new String[9];
+        for (int i = 0; i < 4; i++) {
+            cell[i] = jTable1.getModel().getValueAt(row, i).toString();
+            System.out.println(cell[i]);
+        }
+
+        try {
+
+            if (JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+                DBM.dbms.iud("update staff_Info set ID='" + cell[0] + "', name='" + cell[1] + "', contact='" + cell[2] + "', email='" + cell[3] + "'where ID = '" + cell[0] + "'");
+
+                JOptionPane.showMessageDialog(null, "Edited Successfully");
+            } else {
+                JOptionPane.showMessageDialog(null, "Edited Unsuccesful!");
+            }
+            try {
+                ResultSet rs = DBM.dbms.search("select * from staff_info");
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.setRowCount(0);
+                while (rs.next()) {
+                    String[] rows = {rs.getString("ID"), rs.getString("NAME"), rs.getString("CONTACT"), rs.getString("EMAIL")};
+                    model.addRow(rows);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            ResultSet rs = DBM.dbms.search("select * from staff_info where ID='" + jTextField1.getText() + "'");
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            while (rs.next()) {
+                String[] rows = {rs.getString("ID"), rs.getString("NAME"), rs.getString("CONTACT"), rs.getString("EMAIL")};
+                model.addRow(rows);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            if (JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+                DBM.dbms.iud("DELETE FROM staff_info where ID='" + jTextField1.getText() + "'");
+
+                JOptionPane.showMessageDialog(null, "Edited Successfully");
+            } else {
+                JOptionPane.showMessageDialog(null, "Edited Unsuccesful!");
+            }
+            ResultSet rs = DBM.dbms.search("select * from staff_info");
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.setRowCount(0);
+                while (rs.next()) {
+                    String[] rows = {rs.getString("ID"), rs.getString("NAME"), rs.getString("CONTACT"), rs.getString("EMAIL")};
+                    model.addRow(rows);
+                }
+            
+        } catch (Exception e) {
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
